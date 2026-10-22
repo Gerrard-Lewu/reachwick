@@ -1,5 +1,5 @@
 import { acquireLock } from "./lock.js";
-import { openDb } from "./db.js";
+import { createPrivateSqliteFile, openDb, restrictSqliteFiles } from "./db.js";
 import { hashPassword } from "./app.js";
 import Database from "better-sqlite3";
 import {
@@ -87,7 +87,10 @@ if (command === "restore") {
     } finally {
       check.close();
     }
+    if (existsSync(temporary)) unlinkSync(temporary);
+    createPrivateSqliteFile(temporary);
     copyFileSync(target, temporary);
+    restrictSqliteFiles(temporary);
     renameSync(temporary, dest);
     console.log("Restored database");
   } finally {
@@ -130,13 +133,16 @@ if (command === "restore") {
       console.log("Owner configured");
     } else if (command === "backup") {
       if (
-        !target ||
+        !target?.trim() ||
+        target.trim() === ":memory:" ||
         resolve(target) ===
           resolve(process.env.DATABASE_PATH || "data/reachwick.sqlite") ||
         existsSync(target)
       )
         throw new Error("Provide a new backup file path");
+      createPrivateSqliteFile(target);
       await db.backup(target);
+      restrictSqliteFiles(target);
       console.log("Backup created");
     } else if (command === "seed") {
       db.prepare(

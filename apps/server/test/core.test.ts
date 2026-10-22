@@ -1,6 +1,6 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { mkdtempSync, rmSync } from "node:fs";
+import { existsSync, mkdtempSync, rmSync, statSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { createApp, hashPassword } from "../src/app.js";
@@ -44,11 +44,40 @@ test("owner session, origin protection, CSV validation and persistence", async (
     });
     assert.equal(imported.json().imported, 1);
     assert.equal(imported.json().errors.length, 2);
+    const formulaImported = await app.inject({
+      method: "POST",
+      url: "/api/v1/leads/import",
+      headers,
+      payload: { csv: "email,name\nformula@example.test,\t=1+1" },
+    });
+    assert.equal(formulaImported.json().imported, 1);
+    const directFormula = await app.inject({
+      method: "POST",
+      url: "/api/v1/leads/import",
+      headers,
+      payload: { csv: "email,name\ndirect@example.test,=1+1" },
+    });
+    assert.equal(directFormula.json().imported, 1);
+    const fullWidthFormula = await app.inject({
+      method: "POST",
+      url: "/api/v1/leads/import",
+      headers,
+      payload: { csv: "email,name\nfullwidth@example.test,＝1+1" },
+    });
+    assert.equal(fullWidthFormula.json().imported, 1);
+    const exported = await app.inject({
+      url: "/api/v1/leads/export",
+      headers,
+    });
+    assert.ok(exported.body.includes('"\'\t=1+1"'));
+    assert.ok(exported.body.includes("a@example.test"));
+    assert.ok(exported.body.includes(`"'=1+1"`));
+    assert.ok(exported.body.includes(`"'＝1+1"`));
     await app.close();
     app = await createApp(path);
     assert.equal(
       (await app.inject({ url: "/api/v1/leads", headers })).json().length,
-      1,
+      4,
     );
     await app.inject({
       method: "POST",
@@ -62,6 +91,66 @@ test("owner session, origin protection, CSV validation and persistence", async (
     );
   } finally {
     await app.close();
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+test("login throttling separates trusted tunnel clients and ignores spoofed headers", async () => {
+  const dir = mkdtempSync(join(tmpdir(), "reachwick-rate-limit-"));
+  const path = join(dir, "db.sqlite");
+  const previousProxy = process.env.TRUSTED_TUNNEL_PROXY_IP;
+  process.env.TRUSTED_TUNNEL_PROXY_IP = "127.0.0.1";
+  let app: Awaited<ReturnType<typeof createApp>> | undefined;
+  try {
+    app = await createApp(path);
+    const login = (clientIp: string, remoteAddress = "127.0.0.1") =>
+      app!.inject({
+        method: "POST",
+        url: "/api/v1/auth/login",
+        remoteAddress,
+        headers: { "cf-connecting-ip": clientIp },
+        payload: { email: "owner@example.test", password: "wrong password" },
+      });
+    for (let i = 0; i < 5; i++)
+      assert.equal((await login("198.51.100.10")).statusCode, 401);
+    assert.equal((await login("198.51.100.10")).statusCode, 429);
+    assert.equal((await login("198.51.100.11")).statusCode, 401);
+    for (let i = 0; i < 5; i++)
+      assert.equal(
+        (await login(`203.0.113.${i + 1}`, "127.0.0.2")).statusCode,
+        401,
+      );
+    assert.equal((await login("203.0.113.6", "127.0.0.2")).statusCode, 429);
+  } finally {
+    await app?.close();
+    if (previousProxy === undefined) delete process.env.TRUSTED_TUNNEL_PROXY_IP;
+    else process.env.TRUSTED_TUNNEL_PROXY_IP = previousProxy;
+    rmSync(dir, { recursive: true, force: true });
+  }
+});
+test("SQLite data files stay private under a permissive Unix umask", (t) => {
+  if (process.platform === "win32") {
+    t.skip("Windows file access is governed by inherited ACLs");
+    return;
+  }
+  const dir = mkdtempSync(join(tmpdir(), "reachwick-permissions-"));
+  const path = join(dir, "db.sqlite");
+  const previousUmask = process.umask(0);
+  let db;
+  try {
+    db = openDb(path);
+  } finally {
+    process.umask(previousUmask);
+  }
+  try {
+    db.prepare("INSERT INTO owner VALUES(?,?)").run(
+      "owner@example.test",
+      "synthetic-hash",
+    );
+    assert.equal(statSync(path).mode & 0o777, 0o600);
+    const wal = path + "-wal";
+    if (existsSync(wal)) assert.equal(statSync(wal).mode & 0o777, 0o600);
+  } finally {
+    db.close();
     rmSync(dir, { recursive: true, force: true });
   }
 });

@@ -10,6 +10,10 @@ services:
       DATABASE_PATH: /data/reachwick.sqlite
       PUBLIC_ORIGIN: ${PUBLIC_ORIGIN:-http://127.0.0.1:3000}
       SECURE_COOKIES: ${SECURE_COOKIES:-false}
+      TRUSTED_TUNNEL_PROXY_IP: ${TRUSTED_TUNNEL_PROXY_IP:-172.30.254.2}
+    networks:
+      reachwick:
+        ipv4_address: ${REACHWICK_APP_IP:-172.30.254.3}
   cloudflared:
     image: cloudflare/cloudflared@sha256:faa8e0a1475f137c910be6025f43c8e4092fdd35461b31e19fd1390657a1ff39
     profiles: [cloud]
@@ -17,8 +21,16 @@ services:
     command: tunnel --no-autoupdate run --token-file /run/secrets/tunnel_token
     secrets: [tunnel_token]
     depends_on: [app]
+    networks:
+      reachwick:
+        ipv4_address: ${TRUSTED_TUNNEL_PROXY_IP:-172.30.254.2}
 secrets:
   tunnel_token:
     file: ${CLOUDFLARE_TUNNEL_TOKEN_FILE:-./tunnel-token.local}
 volumes:
   reachwick-data:
+networks:
+  reachwick:
+    ipam:
+      config:
+        - subnet: ${REACHWICK_NETWORK_SUBNET:-172.30.254.0/24}
