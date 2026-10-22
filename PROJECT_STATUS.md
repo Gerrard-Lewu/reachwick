@@ -1,13 +1,13 @@
 # Project status
 
-Reachwick is public at https://github.com/Gerrard-Lewu/reachwick. The v0.1.0 application remains an unreleased candidate. An active ruleset protects `main`; private vulnerability reporting, the dependency graph, Dependabot alerts and security updates, secret scanning, and push protection are enabled. Manual release run `39832775772` passed application checks and dependency audit, then failed while generating the SPDX SBOM before publishing an image or draft release. The workspace-version and SBOM-validation fix is in draft PR #10; its `check`, `secrets`, and `dependency-review` jobs all passed in run `39833658407`. Oracle/Cloudflare live verification remains.
+Reachwick is public at https://github.com/Gerrard-Lewu/reachwick. PR #10 merged as `1529d612`; main CI passed. Manual release run `39834407710` passed and created a v0.1.0 draft release with an SPDX SBOM, image metadata, and SHA256SUMS. The public GHCR image manifest is an OCI index for Linux AMD64 and ARM64. Final release publication and Oracle/Cloudflare live verification remain pending because no VM or tunnel is provisioned.
 
 ## Plan to finish v0.1.0
 
 1. Protect `main` with pull requests and the `check`, `secrets`, and `dependency-review` status checks. Done.
-2. After PR #10 is approved and merged, rerun the manual v0.1.0 release workflow and verify AMD64/ARM64 images, SBOM, checksums, and draft release.
-3. Test HTTPS through Cloudflare Tunnel on a user-provisioned Oracle VM and confirm direct app access is blocked.
-4. Publish the release after deployment checks pass.
+2. Merge PR #10, run the v0.1.0 workflow, and verify the multi-architecture image and draft assets. Done.
+3. Test HTTPS through Cloudflare Tunnel on a user-provisioned Oracle VM and confirm direct app access is blocked. Waiting for cloud environment provisioning.
+4. Publish the v0.1.0 release after deployment checks pass.
 
 Scope remains one owner and local SQLite storage. Live sending, mailbox sync, AI research, billing, and team accounts are later milestones.
 
@@ -63,3 +63,11 @@ Scope remains one owner and local SQLite storage. Live sending, mailbox sync, AI
 - PR #10's `check`, `secrets`, and `dependency-review` jobs all passed in workflow run `39833658407`, including the AMD64 container smoke check. The draft PR remains open and unmerged. Main is protected, and no merge was performed.
 - Local SPDX generation validated 225 packages in an SPDX-2.3 document; local formatting and release checks passed. The first release run stopped before image publication and release creation.
 - Next: obtain maintainer approval to merge PR #10, rerun the manual release on `main`, verify the image/SBOM/checksums/draft release, and complete Oracle/Cloudflare live testing on a user-provisioned VM before publishing v0.1.0.
+
+### 2026-10-22 18:59 UTC — v0.1.0 release candidate built
+
+- PR #10 was merged with maintainer approval as `1529d612778a6a26c5d9152846d8dd904c1575d5`. Main CI run `39834131357` succeeded; its `check` and `secrets` jobs passed, and dependency review was skipped on the push event.
+- Manual release run `39834407710` succeeded on that commit. Full-history secret scanning, version validation, typecheck, lint, API/CLI tests, build, release screening, production dependency audit, SBOM generation/validation, and both AMD64 and ARM64 container smoke checks passed.
+- The release created public image `ghcr.io/gerrard-lewu/reachwick:v0.1.0`. An anonymous registry request returned an OCI image index at `sha256:cd832ce87d12ce07ac5532d4a92f75d84c031f2cda99ab2f8b230b9549f7069e` with `linux/amd64` and `linux/arm64` manifests.
+- GitHub has a v0.1.0 draft with `image-metadata.json` (22.4 KB), `sbom.spdx.json` (262 KB, SPDX-2.3 with 225 packages), and `SHA256SUMS` (167 bytes). The tag remains attached to the draft; no public GitHub release was published.
+- Oracle VM/Cloudflare Tunnel live validation remains outstanding because the environment is not provisioned. Keep v0.1.0 as a draft until the live HTTPS and blocked-direct-port checks pass. PR #9 remains an open documentation review; its stale status summary and line-ending finding are being updated.
