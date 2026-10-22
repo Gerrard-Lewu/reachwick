@@ -1,0 +1,29 @@
+{
+  "name": "@reachwick/server",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "typecheck": "tsc --noEmit",
+    "test": "tsx --test test/*.test.ts",
+    "start": "node dist/apps/server/src/index.js",
+    "cli": "tsx src/cli.ts",
+    "owner:setup": "node dist/apps/server/src/cli.js owner:setup",
+    "owner:reset": "node dist/apps/server/src/cli.js owner:reset",
+    "seed": "node dist/apps/server/src/cli.js seed",
+    "backup": "node dist/apps/server/src/cli.js backup",
+    "restore": "node dist/apps/server/src/cli.js restore"
+  },
+  "dependencies": {
+    "@fastify/cookie": "^11.0.2",
+    "@fastify/rate-limit": "^10.3.0",
+    "@fastify/static": "^10.1.7",
+    "better-sqlite3": "^12.4.1",
+    "fastify": "^5.6.1",
+    "zod": "^4.1.12"
+  },
+  "devDependencies": {
+    "@types/better-sqlite3": "^7.6.13",
+    "tsx": "^4.20.6"
+  }
+}

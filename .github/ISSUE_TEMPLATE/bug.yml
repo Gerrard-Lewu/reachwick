@@ -1,0 +1,10 @@
+name: Bug report
+description: Report a reproducible application defect (no security disclosures)
+body:
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Version, environment, steps, expected and actual behavior
+      description: Redact personal data and credentials. Report vulnerabilities privately.
+    validations:
+      required: true

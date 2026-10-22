@@ -34,4 +34,3 @@ Use your Windows, macOS, or Linux device, Docker, or an Oracle VM behind Cloudfl
 [Contribution guide](CONTRIBUTING.md) · [API](docs/api.md) · [Architecture](docs/architecture.md) · [Security](SECURITY.md)
 
 Maintained by Gerrard Lewu. [MIT](LICENSE); dependencies retain their [licenses](THIRD_PARTY_NOTICES.md). Repository practices inspired by [REA](https://github.com/morluto/rea).
-

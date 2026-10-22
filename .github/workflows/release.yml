@@ -1,0 +1,51 @@
+name: Manual release
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Version tag (for example v0.1.0)
+        required: true
+permissions:
+  contents: read
+jobs:
+  publish:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    environment: release
+    permissions:
+      contents: write
+      packages: write
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          fetch-depth: 0
+      - name: Scan complete Git history
+        run: docker run --rm -v "$PWD:/repo" zricethezav/gitleaks@sha256:b5918eb91b8d2473cec722f066abb4352e4ffdc4ec9f4283ec143aba9ec9ebc4 git /repo --redact --no-banner
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: "24"
+      - name: Validate version
+        env:
+          VERSION: ${{ inputs.version }}
+        run: |
+          [[ "$VERSION" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]
+          test "$VERSION" = "v$(node -p 'require("./package.json").version')"
+      - run: npm ci && npm run typecheck && npm run lint && npm test && npm run build && npm run check:release
+      - run: npm audit --omit=dev --audit-level=high
+      - run: npm sbom --sbom-format=spdx > sbom.spdx.json
+      - name: Build and publish multiarch image
+        env:
+          GH_TOKEN: ${{ github.token }}
+          VERSION: ${{ inputs.version }}
+        run: |
+          IMAGE="ghcr.io/${GITHUB_REPOSITORY,,}:$VERSION"
+          echo "$GH_TOKEN" | docker login ghcr.io -u "$GITHUB_ACTOR" --password-stdin
+          sudo apt-get update && sudo apt-get install -y qemu-user-static
+          docker buildx create --use
+          for architecture in amd64 arm64; do
+            docker buildx build --platform "linux/$architecture" --load --tag "reachwick:smoke-$architecture" .
+            bash .github/container-smoke.sh "reachwick:smoke-$architecture"
+          done
+          docker buildx build --platform linux/amd64,linux/arm64 --sbom=true --provenance=true --push --tag "$IMAGE" --metadata-file image-metadata.json .
+          sha256sum sbom.spdx.json image-metadata.json > SHA256SUMS
+          gh release create "$VERSION" sbom.spdx.json image-metadata.json SHA256SUMS --generate-notes --draft

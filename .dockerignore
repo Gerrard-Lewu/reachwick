@@ -1,0 +1,17 @@
+node_modules
+**/node_modules
+**/dist
+.git
+data
+*.sqlite*
+.env*
+coverage
+*.secret
+**/*.secret
+tunnel-token.local
+**/data
+**/backups
+**/*.db*
+**/*.password
+*.password
+**/*.log

@@ -1,0 +1,24 @@
+services:
+  app:
+    build: .
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:3000:3000"
+    volumes:
+      - reachwick-data:/data
+    environment:
+      DATABASE_PATH: /data/reachwick.sqlite
+      PUBLIC_ORIGIN: ${PUBLIC_ORIGIN:-http://127.0.0.1:3000}
+      SECURE_COOKIES: ${SECURE_COOKIES:-false}
+  cloudflared:
+    image: cloudflare/cloudflared@sha256:faa8e0a1475f137c910be6025f43c8e4092fdd35461b31e19fd1390657a1ff39
+    profiles: [cloud]
+    restart: unless-stopped
+    command: tunnel --no-autoupdate run --token-file /run/secrets/tunnel_token
+    secrets: [tunnel_token]
+    depends_on: [app]
+secrets:
+  tunnel_token:
+    file: ${CLOUDFLARE_TUNNEL_TOKEN_FILE:-./tunnel-token.local}
+volumes:
+  reachwick-data:

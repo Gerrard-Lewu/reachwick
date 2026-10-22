@@ -1,0 +1,39 @@
+{
+  "name": "reachwick",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "license": "MIT",
+  "engines": {
+    "node": ">=24 <25"
+  },
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "npm run build --workspaces --if-present",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "test": "npm run test --workspaces --if-present && node scripts/verify-cli.mjs",
+    "lint": "eslint .",
+    "check:release": "node scripts/check-release.mjs",
+    "start": "npm run start --workspace @reachwick/server",
+    "dev": "npm run dev --workspace @reachwick/web",
+    "owner:setup": "npm run owner:setup --workspace @reachwick/server",
+    "owner:reset": "npm run owner:reset --workspace @reachwick/server",
+    "seed": "npm run seed --workspace @reachwick/server",
+    "backup": "npm run backup --workspace @reachwick/server",
+    "restore": "npm run restore --workspace @reachwick/server",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "licenses": "node scripts/licenses.mjs"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@types/node": "^24.0.0",
+    "eslint": "^10.13.0",
+    "prettier": "^3.9.10",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.72.0"
+  }
+}

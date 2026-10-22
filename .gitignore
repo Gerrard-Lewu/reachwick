@@ -1,0 +1,17 @@
+node_modules/
+dist/
+.env
+.env.*
+!.env.example
+data/
+*.sqlite*
+*.db*
+coverage/
+*.log
+backups/
+*.tgz
+*.zip
+.DS_Store
+tunnel-token.local
+*.secret
+*.password
