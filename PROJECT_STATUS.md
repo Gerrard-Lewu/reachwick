@@ -1,6 +1,15 @@
 # Project status
 
-Reachwick v0.1.0 candidate; public source repository created at https://github.com/Gerrard-Lewu/reachwick. A verified versioned release remains pending container and cloud checks. Target: Gerrard-Lewu/reachwick, MIT, Gerrard Lewu. Single owner, SQLite, portable Node application. No live sending or cloud provisioning.
+Reachwick is public at https://github.com/Gerrard-Lewu/reachwick. The v0.1.0 application is a release candidate, not a verified release. Local checks and GitHub CI pass; GitHub CI includes an AMD64 container smoke test and full-history secret scan. Private vulnerability reporting, dependency graph, Dependabot alerts and security updates, secret scanning, and push protection are enabled. Main-branch protection awaits GitHub passkey reauthentication. Multi-architecture release and live Oracle/Cloudflare deployment checks remain.
+
+## Plan to finish v0.1.0
+
+1. Protect `main` with pull requests and the `check`, `secrets`, and `dependency-review` status checks.
+2. Run the manual v0.1.0 release workflow; verify AMD64/ARM64 images, SBOM, checksums, and draft release.
+3. Test HTTPS through Cloudflare Tunnel on a user-provisioned Oracle VM and confirm direct app access is blocked.
+4. Publish the release after deployment checks pass.
+
+Scope remains one owner and local SQLite storage. Live sending, mailbox sync, AI research, billing, and team accounts are later milestones.
 
 ## Task history
 
@@ -24,3 +33,11 @@ Reachwick v0.1.0 candidate; public source repository created at https://github.c
 - Simplified README to product introduction, screenshot, quick start and documentation links. Source/artifact screening and git diff --check passed.
 - Verified remote source tree 4bd474dbcb2f128d791d6c0a9c5f74fbaa95e6b7 exactly matches the prepared local tree at publication commit f76a7ec839a9e9b40b3d281fe2f235cb812bbaa7. Local prepublication history preserved on local-prepublication; main tracks origin/main.
 - Public repository creation is complete. No versioned release, image publication, or cloud deployment performed. Container/cloud release gates remain unverified; GitHub CI results are separate from the prior local checks.
+
+### 2026-10-22 17:51 UTC — release readiness
+
+- Verified main CI run `39824530759` for `ca2e87af0ead770aba12204af4f91fb714f56991`: application checks and secret scan passed; dependency-review was correctly skipped on a push. CI built and smoke-tested the AMD64 container.
+- Enabled private vulnerability reporting, GitHub dependency graph, Dependabot alerts, and Dependabot security updates. Secret scanning and push protection were already enabled.
+- Local validation: `npm run typecheck`, `npm run lint`, `npm test`, `npm run build`, `npm run check:release`, and `npm audit --omit=dev --audit-level=high` all passed; 0 reported vulnerabilities.
+- Remaining: create main ruleset after GitHub requests passkey reauthentication; run the manual AMD64/ARM64 release workflow; verify user-provisioned Oracle/Cloudflare deployment before publishing a final release.
+
