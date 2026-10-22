@@ -11,7 +11,7 @@ Reachwick is public at https://github.com/Gerrard-Lewu/reachwick. PR #10 merged 
 
 Scope remains one owner and local SQLite storage. Live sending, mailbox sync, AI research, billing, and team accounts are later milestones.
 
-Security scan `0ff64092-e085-4b35-9a15-a00be8644edb` reviewed all 54 repository files statically and reported three low-severity findings. The local remediation candidate narrows Cloudflare client-IP trust to the pinned tunnel service, neutralizes spreadsheet formula prefixes after leading controls, and restricts SQLite data, sidecar, backup, and restore-temporary permissions on Unix. Windows relies on inherited ACLs. Linux CI and Compose validation are pending.
+Security scan `0ff64092-e085-4b35-9a15-a00be8644edb` reviewed all 54 repository files statically and reported three low-severity findings. PR #11 addresses tunnel client-IP trust, spreadsheet formula-like CSV cells, and Unix permissions for SQLite data, sidecar, backup, and restore-temporary files. Windows relies on inherited ACLs. PR #11 CI passed, including Linux tests, Compose validation, container smoke, dependency review, and full-history secret scanning; the PR is open for review.
 
 ## Task history
 
@@ -80,3 +80,10 @@ Security scan `0ff64092-e085-4b35-9a15-a00be8644edb` reviewed all 54 repository 
 - Checks passed: `npm run typecheck`, `npm run lint`, `npm test`, `npm run build`, `npm run check:release`, `npm run format:check`, and `npm audit --omit=dev` (zero vulnerabilities). Release source screening passed.
 - `docker compose config --quiet` could not run because Docker is not installed. Compose validation was added to CI; formatting parsed the YAML locally. Linux CI still needs to validate Compose and the Unix permission assertions.
 - The security audit was static-only. No live spreadsheet, Oracle VM, or Cloudflare Tunnel was available; keep v0.1.0 in draft until cloud HTTPS and blocked-direct-port checks pass.
+
+### 2026-10-22 23:25 UTC — security hardening submitted
+
+- Published commit `0a139db` in PR #11. CI run `39871451951` passed `check`, `secrets`, and `dependency-review`; the check job passed typecheck, lint, tests, build, release screening, dependency audit, Compose configuration, Docker build, and container smoke.
+- Local typecheck, lint, tests, production build, release screening, formatting, and production dependency audit passed. The local Windows run skipped the POSIX permission assertion; Linux CI passed the test suite.
+- PR #11 remains open for maintainer review. Oracle VM and Cloudflare live verification remain pending provisioning; keep v0.1.0 in draft.
+
