@@ -2,6 +2,7 @@
 
 The latest published release is supported; until release, main is development software.
 
-Use **Report a vulnerability** in the GitHub Security tab for private reports. If unavailable, use a private contact channel on the maintainer's GitHub profile. Do not disclose exploit details, credentials, or personal data in public issues. Include version, impact, and minimal redacted reproduction steps. No response-time guarantee is currently offered.
+Use **Report a vulnerability** in the GitHub Security tab for private reports. Private vulnerability reporting is enabled for this repository. If it is unavailable, use a private contact channel on the maintainer's GitHub profile. Do not disclose exploit details, credentials, or personal data in public issues. Include version, impact, and minimal redacted reproduction steps. No response-time guarantee is currently offered.
 
-Run one instance per database, use private backups, and require HTTPS for remote access. The maintainer must enable GitHub private vulnerability reporting before publication; repository files cannot enable that setting.
+Run one instance per database, use private backups, and require HTTPS for remote access.
+
