@@ -1,11 +1,11 @@
 # Project status
 
-Reachwick is public at https://github.com/Gerrard-Lewu/reachwick. The v0.1.0 application is a release candidate, not a verified release. Local checks and GitHub CI pass; GitHub CI includes an AMD64 container smoke test and full-history secret scan. Private vulnerability reporting, dependency graph, Dependabot alerts and security updates, secret scanning, and push protection are enabled. Main-branch protection awaits GitHub passkey reauthentication. Multi-architecture release and live Oracle/Cloudflare deployment checks remain.
+Reachwick is public at https://github.com/Gerrard-Lewu/reachwick. The v0.1.0 application remains an unreleased candidate. An active ruleset protects `main`; private vulnerability reporting, the dependency graph, Dependabot alerts and security updates, secret scanning, and push protection are enabled. Manual release run `39832775772` passed application checks and dependency audit, then failed while generating the SPDX SBOM before publishing an image or draft release. A workspace-version and SBOM-validation fix is in PR #10; its secret and dependency-review checks passed, and its application check is still running. Oracle/Cloudflare live verification remains.
 
 ## Plan to finish v0.1.0
 
-1. Protect `main` with pull requests and the `check`, `secrets`, and `dependency-review` status checks.
-2. Run the manual v0.1.0 release workflow; verify AMD64/ARM64 images, SBOM, checksums, and draft release.
+1. Protect `main` with pull requests and the `check`, `secrets`, and `dependency-review` status checks. Done.
+2. Merge the SBOM fix after its checks pass, rerun the manual v0.1.0 release workflow, and verify AMD64/ARM64 images, SBOM, checksums, and draft release.
 3. Test HTTPS through Cloudflare Tunnel on a user-provisioned Oracle VM and confirm direct app access is blocked.
 4. Publish the release after deployment checks pass.
 
@@ -49,3 +49,11 @@ Scope remains one owner and local SQLite storage. Live sending, mailbox sync, AI
 - Docker is unavailable locally. The successful GitHub CI run covers AMD64 only. No Oracle VM or Cloudflare Tunnel is provisioned, and no v0.1.0 release, tag, image, or live cloud verification exists.
 - The documentation audit is proposed in PR #9 and is not merged. Its `check`, `secrets`, and `dependency-review` jobs passed. GitHub still reports main run `39826470952` as `in_progress` although its `check` and `secrets` jobs completed successfully and `dependency-review` was skipped on push; earlier complete main run `39824530759` succeeded.
 - Next: complete GitHub passkey authentication and verify the active ruleset; run the manual multi-architecture release workflow and inspect its image, SBOM, checksums, and draft release; test the user-provisioned Oracle/Cloudflare deployment; publish v0.1.0 only after those gates pass.
+
+### 2026-10-22 18:42 UTC — SBOM release workflow remediation
+
+- Active `Protect main` ruleset requires PRs, resolved conversations, and up-to-date `check`, `secrets`, and `dependency-review`; it blocks deletion and force-pushes.
+- Dispatched manual release run `39832775772` on `main` commit `08afd9a`. Full-history secret scan, version validation, typecheck, lint, API/CLI tests, build, release screening, and production dependency audit passed. `npm sbom` failed because `@reachwick/server` and `@reachwick/shared` had no versions; the image publishing step was skipped, so no image or draft release was created.
+- Added `0.1.0` versions for both workspaces and updated `package-lock.json`. Added a workflow validation step for the generated SPDX document. Local typecheck, lint, tests, build, release screening, format check, diff check, production audit, and SPDX generation/validation passed; the SBOM contains 225 packages and uses SPDX-2.3.
+- Draft remediation PR #10 is open. Its `secrets` and `dependency-review` checks passed; `check` is still running. PR #9 remains the separate documentation audit.
+- Next: wait for PR #10's required checks, then rerun the release workflow after it reaches `main`; inspect the multi-architecture image and draft-release artifacts; test the user-provisioned Oracle/Cloudflare deployment; publish only after all gates pass. No cloud VM or tunnel is available in this workspace.
