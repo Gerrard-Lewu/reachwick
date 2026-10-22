@@ -32,7 +32,11 @@ jobs:
           test "$VERSION" = "v$(node -p 'require("./package.json").version')"
       - run: npm ci && npm run typecheck && npm run lint && npm test && npm run build && npm run check:release
       - run: npm audit --omit=dev --audit-level=high
-      - run: npm sbom --sbom-format=spdx > sbom.spdx.json
+      - name: Generate SPDX software bill of materials
+        run: npm sbom --sbom-format=spdx > sbom.spdx.json
+      - name: Validate software bill of materials
+        run: |
+          node -e 'const sbom = JSON.parse(require("node:fs").readFileSync("sbom.spdx.json", "utf8")); if (!sbom.spdxVersion || !Array.isArray(sbom.packages) || sbom.packages.length === 0) throw new Error("Generated SPDX document has no package data."); console.log(`Validated ${sbom.packages.length} packages (${sbom.spdxVersion}).`);'
       - name: Build and publish multiarch image
         env:
           GH_TOKEN: ${{ github.token }}
