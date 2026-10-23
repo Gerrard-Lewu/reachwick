@@ -1,15 +1,15 @@
 # Project status
 
-Reachwick is public at https://github.com/Gerrard-Lewu/reachwick. PR #10 merged as `1529d612`; main CI passed. Manual release run `39834407710` passed and created a v0.1.0 draft release with an SPDX SBOM, image metadata, and SHA256SUMS. The public GHCR image manifest is an OCI index for Linux AMD64 and ARM64. Final release publication and Oracle/Cloudflare live verification remain pending because no VM or tunnel is provisioned.
+Reachwick is public at https://github.com/Gerrard-Lewu/reachwick. PR #10 is merged; PR #9 (release status docs) and PR #11 (security hardening) remain open. Manual release run `39834407710` passed and created a v0.1.0 draft with an SPDX SBOM, image metadata, and SHA256SUMS; the public GHCR image supports Linux AMD64 and ARM64. Final publication and hosted HTTPS verification remain pending because no host or tunnel is provisioned.
 
 ## Plan to finish v0.1.0
 
 1. Protect `main` with pull requests and the `check`, `secrets`, and `dependency-review` status checks. Done.
 2. Merge PR #10, run the v0.1.0 workflow, and verify the multi-architecture image and draft assets. Done.
-3. Test HTTPS through Cloudflare Tunnel on a user-provisioned Oracle VM and confirm direct app access is blocked. Waiting for cloud environment provisioning.
+3. Verify HTTPS through the selected remote-access proxy or tunnel and confirm direct app access is blocked. Waiting for the maintainer's personal environment; public deployment guidance remains provider-neutral.
 4. Publish the v0.1.0 release after deployment checks pass.
 
-Scope remains one owner and local SQLite storage. Live sending, mailbox sync, AI research, billing, and team accounts are later milestones.
+The current application supports one owner and local SQLite storage, with manual and CSV lead intake plus lead and campaign management. The next product milestone is lead discovery and research for the owner's lead-generation workflow. Live sending, mailbox sync, billing, and team accounts remain later milestones.
 
 Security scan `0ff64092-e085-4b35-9a15-a00be8644edb` reviewed all 54 repository files statically and reported three low-severity findings. PR #11 addresses tunnel client-IP trust, spreadsheet formula-like CSV cells, and Unix permissions for SQLite data, sidecar, backup, and restore-temporary files. Windows relies on inherited ACLs. PR #11 CI passed, including Linux tests, Compose validation, container smoke, dependency review, and full-history secret scanning; the PR is open for review.
 
@@ -87,3 +87,9 @@ Security scan `0ff64092-e085-4b35-9a15-a00be8644edb` reviewed all 54 repository 
 - Local typecheck, lint, tests, production build, release screening, formatting, and production dependency audit passed. The local Windows run skipped the POSIX permission assertion; Linux CI passed the test suite.
 - PR #11 remains open for maintainer review. Oracle VM and Cloudflare live verification remain pending provisioning; keep v0.1.0 in draft.
 
+### 2026-10-23 00:25 UTC — provider-neutral scope and community board
+
+- The maintainer clarified that the product should support personal lead generation and management while public hosting guidance stays provider-neutral. Updated the README, roadmap, deployment guide, release gates, and changelog. Current v0.1 capabilities are described as manual/CSV lead intake and management; guided lead discovery and research is the next milestone.
+- Created the public [Reachwick Roadmap project](https://github.com/users/Gerrard-Lewu/projects/4), set Reachwick as its default repository, and documented how contributors should use it. The repository had no open issues to import, so I added design issue [#12](https://github.com/Gerrard-Lewu/reachwick/issues/12) and verified GitHub linked it to the board's Todo column.
+- Confirmed the GitHub repository remains public and PRs #9 and #11 remain open. The connected cloud-management interface supports read-only inventory but exposes no VM/network provisioning operation; no cloud resources were created. Hosted deployment verification remains pending.
+- Validation: reviewed repository/PR/issue state and project visibility; no application tests were run for this documentation and project-setup change.
