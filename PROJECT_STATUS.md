@@ -109,3 +109,9 @@ Security scan `0ff64092-e085-4b35-9a15-a00be8644edb` reviewed all 54 repository 
 - Clarified the full product goal as lead generation plus lead management; guided discovery must produce source-attributed prospects for owner review and then feed the existing lead workflow. The maintainer's hosting choice stays separate from provider-neutral community instructions.
 - Kept discovery tracked in issue [#12](https://github.com/Gerrard-Lewu/reachwick/issues/12) and community priorities in the public Project board. Issue metadata shows Todo; the board view still does not render its card reliably.
 - Validation: confirmed the README, roadmap, contribution guide, and deployment docs keep server guidance provider-neutral. No application tests run for this documentation-only clarification. PR #11 remains open at `136efacf`; CI passed on that head. Hosted HTTPS/direct-port checks and final release remain pending.
+
+### 2026-10-23 00:53 UTC — data-directory permissions finding fixed
+
+- PR #11 commit `625d8ff` makes `acquireLock` create new database directories with mode `0700` before writing the lock, and adds a fresh nested-path regression test under umask `0`.
+- Node.js 24 local typecheck, lint, full tests, production build, release screening, and format check passed. The two POSIX permission tests are skipped on Windows; Linux CI run `39880202821` passed typecheck, lint, tests, build, release screening, audit, Compose validation, Docker build/smoke, secrets, and dependency review.
+- PR #11 remains open and unmerged. Hosted HTTPS/direct-port checks are still pending; keep v0.1.0 as a draft.
