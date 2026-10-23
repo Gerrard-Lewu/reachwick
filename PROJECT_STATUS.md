@@ -115,3 +115,9 @@ Security scan `0ff64092-e085-4b35-9a15-a00be8644edb` reviewed all 54 repository 
 - PR #11 commit `625d8ff` makes `acquireLock` create new database directories with mode `0700` before writing the lock, and adds a fresh nested-path regression test under umask `0`.
 - Node.js 24 local typecheck, lint, full tests, production build, release screening, and format check passed. The two POSIX permission tests are skipped on Windows; Linux CI run `39880202821` passed typecheck, lint, tests, build, release screening, audit, Compose validation, Docker build/smoke, secrets, and dependency review.
 - PR #11 remains open and unmerged. Hosted HTTPS/direct-port checks are still pending; keep v0.1.0 as a draft.
+
+### 2026-10-23 01:04 UTC — GitHub Project board display check
+
+- Reconfirmed issue [#12](https://github.com/Gerrard-Lewu/reachwick/issues/12) is linked to the public [Reachwick Roadmap project](https://github.com/users/Gerrard-Lewu/projects/4) with status Todo. The board has no filters but still displays zero items in Todo, In Progress, and Done.
+- Refreshed the issue’s project membership and reloaded the board; it remained empty. The board’s add-item search offered to create a new issue with the same title, so no duplicate was created. Board display remains unresolved; the issue stays linked.
+- No application code changed and no application tests ran. Provider-neutral deployment guidance, the broader prospect-generation and management goal, and the draft-release / hosted-verification gates remain as recorded above.
