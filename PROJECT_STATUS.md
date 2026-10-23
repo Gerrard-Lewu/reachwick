@@ -9,7 +9,7 @@ Reachwick is public at https://github.com/Gerrard-Lewu/reachwick. PR #10 is merg
 3. Verify HTTPS through the selected remote-access proxy or tunnel and confirm direct app access is blocked. Waiting for the maintainer's personal environment; public deployment guidance remains provider-neutral.
 4. Publish the v0.1.0 release after deployment checks pass.
 
-The current application supports one owner and local SQLite storage, with manual and CSV lead intake plus lead and campaign management. The next product milestone is lead discovery and research for the owner's lead-generation workflow. Live sending, mailbox sync, billing, and team accounts remain later milestones.
+Reachwick's full product goal is an open-source workspace for both prospect generation and outreach management. The current application supports one owner and local SQLite storage, with manual/CSV lead intake, lead and campaign management, and sequence planning. The next milestone is guided, source-attributed discovery that feeds reviewed prospects into the same lead manager. Community work is tracked in the public [Reachwick Roadmap project](https://github.com/users/Gerrard-Lewu/projects/4). Public installation guidance stays provider-neutral for local use and any server that supports Docker Compose and persistent storage. Live sending, mailbox sync, billing, and team accounts remain later milestones.
 
 Security scan `0ff64092-e085-4b35-9a15-a00be8644edb` reviewed all 54 repository files statically and reported three low-severity findings. PR #11 addresses tunnel client-IP trust, spreadsheet formula-like CSV cells, and Unix permissions for SQLite data, sidecar, backup, and restore-temporary files. Windows relies on inherited ACLs. PR #11 CI passed, including Linux tests, Compose validation, container smoke, dependency review, and full-history secret scanning; the PR is open for review.
 
@@ -21,7 +21,7 @@ Security scan `0ff64092-e085-4b35-9a15-a00be8644edb` reviewed all 54 repository 
 - Verified: typecheck, ESLint, two API integration suites, CLI setup/reset/session revocation/seed/backup/restore, production build, formatting check, source/artifact screening, npm audit (zero reported vulnerabilities).
 - Browser evidence: real Playwright session exercised login, lead creation/editing, campaign sequence/membership/schedule, persistence after reload, suppression, settings, mobile overflow and logout. Fixed settings stale defaults. Screenshot uses synthetic records; raw browser logs remain outside repository.
 - Corrected vulnerable static-file dependency to patched version. Recorded installed dependency license notices. Automated CI includes full-history Gitleaks and container smoke checks; these have not run on GitHub.
-- Limitations: Docker unavailable locally; AMD64/ARM64 container smoke checks and live Oracle/Cloudflare verification unrun. GitHub CLI credentials invalid; no public repository, push, tag, image or release published. Domain/trademark availability unverified. Paid 12ui generation was not used; no spending was authorized.
+- Limitations: Docker unavailable locally; AMD64/ARM64 container smoke checks and live hosted HTTPS/direct-port verification unrun. GitHub CLI credentials invalid; no public repository, push, tag, image or release published. Domain/trademark availability unverified. Paid 12ui generation was not used; no spending was authorized.
 - Next: restore GitHub authentication; run container and actual cloud acceptance checks; review and publish the vetted initial history, then execute manual release workflow. Do not describe the candidate as a verified public release until these gates pass.
 
 ### 2026-10-22 17:29 UTC — clean checkout verification
@@ -41,16 +41,16 @@ Security scan `0ff64092-e085-4b35-9a15-a00be8644edb` reviewed all 54 repository 
 - Verified main CI run `39824530759` for `ca2e87af0ead770aba12204af4f91fb714f56991`: application checks and secret scan passed; dependency-review was correctly skipped on a push. CI built and smoke-tested the AMD64 container.
 - Enabled private vulnerability reporting, GitHub dependency graph, Dependabot alerts, and Dependabot security updates. Secret scanning and push protection were already enabled.
 - Local validation: `npm run typecheck`, `npm run lint`, `npm test`, `npm run build`, `npm run check:release`, and `npm audit --omit=dev --audit-level=high` all passed; 0 reported vulnerabilities.
-- Remaining: create main ruleset after GitHub requests passkey reauthentication; run the manual AMD64/ARM64 release workflow; verify user-provisioned Oracle/Cloudflare deployment before publishing a final release.
+- Remaining: create main ruleset after GitHub requests passkey reauthentication; run the manual AMD64/ARM64 release workflow; verify user-provisioned hosted HTTPS before publishing a final release.
 
 ### 2026-10-22 18:26 UTC — renewed release audit
 
 - Re-ran typecheck, lint, API/CLI tests, production build, release screening, formatting, and full `npm audit --audit-level=high`; all passed, with zero reported vulnerabilities. The first format check found trailing blank lines in this file and `SECURITY.md`; both are now formatted. `git diff --check` passed.
 - GitHub run `39826470952` passed `check` and `secrets`; `dependency-review` was skipped because this was a push. Verified the dependency graph is enabled. Its earlier pull-request checks failed while GitHub reported the graph unavailable; retried the check on all eight open Dependabot PRs, and all eight retries passed. PR #8's TypeScript 7 update still fails `npm ci` because `typescript-eslint@8.72.0` requires TypeScript `<6.1.0`; it remains unmerged.
 - GitHub reports no rulesets and no releases. The branch ruleset is fully configured in the browser but GitHub requires passkey reauthentication before it can be saved. Do not treat branch protection as active until the ruleset is visible in repository settings.
-- Docker is unavailable locally. The successful GitHub CI run covers AMD64 only. No Oracle VM or Cloudflare Tunnel is provisioned, and no v0.1.0 release, tag, image, or live cloud verification exists.
+- Docker is unavailable locally. The successful GitHub CI run covers AMD64 only. No hosted VM or tunnel is provisioned, and no v0.1.0 release, tag, image, or live hosted verification exists.
 - The documentation audit is proposed in PR #9 and is not merged. Its `check`, `secrets`, and `dependency-review` jobs passed. GitHub still reports main run `39826470952` as `in_progress` although its `check` and `secrets` jobs completed successfully and `dependency-review` was skipped on push; earlier complete main run `39824530759` succeeded.
-- Next: complete GitHub passkey authentication and verify the active ruleset; run the manual multi-architecture release workflow and inspect its image, SBOM, checksums, and draft release; test the user-provisioned Oracle/Cloudflare deployment; publish v0.1.0 only after those gates pass.
+- Next: complete GitHub passkey authentication and verify the active ruleset; run the manual multi-architecture release workflow and inspect its image, SBOM, checksums, and draft release; test a user-provisioned HTTPS deployment; publish v0.1.0 only after those gates pass.
 
 ### 2026-10-22 18:42 UTC — SBOM release workflow remediation
 
@@ -58,34 +58,34 @@ Security scan `0ff64092-e085-4b35-9a15-a00be8644edb` reviewed all 54 repository 
 - Dispatched manual release run `39832775772` on `main` commit `08afd9a`. Full-history secret scan, version validation, typecheck, lint, API/CLI tests, build, release screening, and production dependency audit passed. `npm sbom` failed because `@reachwick/server` and `@reachwick/shared` had no versions; the image publishing step was skipped, so no image or draft release was created.
 - Added `0.1.0` versions for both workspaces and updated `package-lock.json`. Added a workflow validation step for the generated SPDX document. Local typecheck, lint, tests, build, release screening, format check, diff check, production audit, and SPDX generation/validation passed; the SBOM contains 225 packages and uses SPDX-2.3.
 - Draft remediation PR #10 is open. Its `secrets` and `dependency-review` checks passed; `check` is still running. PR #9 remains the separate documentation audit.
-- Next: wait for PR #10's required checks, then rerun the release workflow after it reaches `main`; inspect the multi-architecture image and draft-release artifacts; test the user-provisioned Oracle/Cloudflare deployment; publish only after all gates pass. No cloud VM or tunnel is available in this workspace.
+- Next: wait for PR #10's required checks, then rerun the release workflow after it reaches `main`; inspect the multi-architecture image and draft-release artifacts; test a user-provisioned HTTPS deployment; publish only after all gates pass. No cloud VM or tunnel is available in this workspace.
 
 ### 2026-10-22 18:43 UTC — release remediation checks complete
 
 - PR #10's `check`, `secrets`, and `dependency-review` jobs all passed in workflow run `39833658407`, including the AMD64 container smoke check. The draft PR remains open and unmerged. Main is protected, and no merge was performed.
 - Local SPDX generation validated 225 packages in an SPDX-2.3 document; local formatting and release checks passed. The first release run stopped before image publication and release creation.
-- Next: obtain maintainer approval to merge PR #10, rerun the manual release on `main`, verify the image/SBOM/checksums/draft release, and complete Oracle/Cloudflare live testing on a user-provisioned VM before publishing v0.1.0.
+- Next: obtain maintainer approval to merge PR #10, rerun the manual release on `main`, verify the image/SBOM/checksums/draft release, and complete live HTTPS/direct-port testing on a user-provisioned server before publishing v0.1.0.
 
 ### 2026-10-22 18:59 UTC — v0.1.0 release candidate built
 
 - PR #10 was merged with maintainer approval as `1529d612778a6a26c5d9152846d8dd904c1575d5`. Main CI run `39834131357` succeeded; its `check` and `secrets` jobs passed, and dependency review was skipped on the push event.
 - Manual release run `39834407710` succeeded on that commit. Full-history secret scanning, version validation, typecheck, lint, API/CLI tests, build, release screening, production dependency audit, SBOM generation/validation, and both AMD64 and ARM64 container smoke checks passed.
-- The release created public image `ghcr.io/gerrard-lewu/reachwick:v0.1.0`. An anonymous registry request returned an OCI image index at `sha256:cd832ce87d12ce07ac5532d4a92f75d84c031f2cda99ab2f8b230b9549f7069e` with `linux/amd64` and `linux/arm64` manifests.
+- The release created public image `ghcr.io/gerrard-lewu/reachwick:v0.1.0`. An anonymous registry request returned a multi-architecture container index at `sha256:cd832ce87d12ce07ac5532d4a92f75d84c031f2cda99ab2f8b230b9549f7069e` with `linux/amd64` and `linux/arm64` manifests.
 - GitHub has a v0.1.0 draft with `image-metadata.json` (22.4 KB), `sbom.spdx.json` (262 KB, SPDX-2.3 with 225 packages), and `SHA256SUMS` (167 bytes). The tag remains attached to the draft; no public GitHub release was published.
-- Oracle VM/Cloudflare Tunnel live validation remains outstanding because the environment is not provisioned. Keep v0.1.0 as a draft until the live HTTPS and blocked-direct-port checks pass. PR #9 now contains the updated release status and normalized formatting; its `check`, `secrets`, and `dependency-review` jobs passed in run `39836410375`.
+- Hosted HTTPS/direct-port validation remains outstanding because the environment is not provisioned. Keep v0.1.0 as a draft until those checks pass. PR #9 now contains the updated release status and normalized formatting; its `check`, `secrets`, and `dependency-review` jobs passed in run `39836410375`.
 
 ### 2026-10-22 23:17 UTC — security remediation candidate
 
 - Added regression coverage for shared tunnel login throttling, CSV formula cells, and Unix database/backup permissions. API and CLI setup/reset/seed/backup/restore tests pass on Windows; the POSIX permission assertion is skipped on this host.
 - Checks passed: `npm run typecheck`, `npm run lint`, `npm test`, `npm run build`, `npm run check:release`, `npm run format:check`, and `npm audit --omit=dev` (zero vulnerabilities). Release source screening passed.
 - `docker compose config --quiet` could not run because Docker is not installed. Compose validation was added to CI; formatting parsed the YAML locally. Linux CI still needs to validate Compose and the Unix permission assertions.
-- The security audit was static-only. No live spreadsheet, Oracle VM, or Cloudflare Tunnel was available; keep v0.1.0 in draft until cloud HTTPS and blocked-direct-port checks pass.
+- The security audit was static-only. No live spreadsheet or hosted deployment was available; keep v0.1.0 in draft until HTTPS and blocked-direct-port checks pass.
 
 ### 2026-10-22 23:25 UTC — security hardening submitted
 
 - Published commit `0a139db` in PR #11. CI run `39871451951` passed `check`, `secrets`, and `dependency-review`; the check job passed typecheck, lint, tests, build, release screening, dependency audit, Compose configuration, Docker build, and container smoke.
 - Local typecheck, lint, tests, production build, release screening, formatting, and production dependency audit passed. The local Windows run skipped the POSIX permission assertion; Linux CI passed the test suite.
-- PR #11 remains open for maintainer review. Oracle VM and Cloudflare live verification remain pending provisioning; keep v0.1.0 in draft.
+- PR #11 remains open for maintainer review. Live hosted HTTPS and direct-port verification remain pending provisioning; keep v0.1.0 in draft.
 
 ### 2026-10-23 00:25 UTC — provider-neutral scope and community board
 
@@ -104,3 +104,8 @@ Security scan `0ff64092-e085-4b35-9a15-a00be8644edb` reviewed all 54 repository 
 - Issue #12 shows the public Reachwick Roadmap project and Todo status in its metadata and activity. After refresh, the project board still shows zero cards and its repository picker remains loading; card visibility is unverified.
 - PR #11 head `7068aa9` passed CI run `39878346297`. No cloud host or tunnel is provisioned.
 
+### 2026-10-23 00:39 UTC — product goal clarified
+
+- Clarified the full product goal as lead generation plus lead management; guided discovery must produce source-attributed prospects for owner review and then feed the existing lead workflow. The maintainer's hosting choice stays separate from provider-neutral community instructions.
+- Kept discovery tracked in issue [#12](https://github.com/Gerrard-Lewu/reachwick/issues/12) and community priorities in the public Project board. Issue metadata shows Todo; the board view still does not render its card reliably.
+- Validation: confirmed the README, roadmap, contribution guide, and deployment docs keep server guidance provider-neutral. No application tests run for this documentation-only clarification. PR #11 remains open at `136efacf`; CI passed on that head. Hosted HTTPS/direct-port checks and final release remain pending.

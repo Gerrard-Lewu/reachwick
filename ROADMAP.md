@@ -1,4 +1,8 @@
-# Roadmap
+# Reachwick roadmap
+
+## Product goal
+
+Build an open-source workspace for both prospect discovery and lead management. Guided discovery should produce source-attributed prospects owners can review and add to the existing lead workflow. People can run Reachwick locally or on any server that supports Docker Compose and persistent storage.
 
 ## 0.1 — Lead and outreach management
 

@@ -1,6 +1,6 @@
 # Reachwick
 
-**Your outreach workspace. Your data. Your infrastructure.**
+**An open-source workspace for lead generation and outreach management. Your data. Your infrastructure.**
 
 Manage leads, draft campaigns, sequences, schedules, and suppression lists in a self-hosted workspace. One owner, local SQLite storage, no required cloud services.
 
