@@ -21,7 +21,7 @@ jobs:
           fetch-depth: 0
       - name: Scan complete Git history
         run: docker run --rm -v "$PWD:/repo" zricethezav/gitleaks@sha256:b5918eb91b8d2473cec722f066abb4352e4ffdc4ec9f4283ec143aba9ec9ebc4 git /repo --redact --no-banner
-      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1
         with:
           node-version: "24"
       - name: Validate version
