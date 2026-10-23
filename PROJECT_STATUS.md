@@ -99,3 +99,8 @@ Security scan `0ff64092-e085-4b35-9a15-a00be8644edb` reviewed all 54 repository 
 - PR #11 head `d7e048f` contains the provider-neutral deployment and lead-discovery scope updates. CI run `39878115433` passed; `git diff --check` passed locally. No application tests were run locally.
 - PR #11 remains open and unmerged. Live hosted HTTPS validation is still pending.
 
+### 2026-10-23 00:31 UTC — project board display check
+
+- Issue #12 shows the public Reachwick Roadmap project and Todo status in its metadata and activity. After refresh, the project board still shows zero cards and its repository picker remains loading; card visibility is unverified.
+- PR #11 head `7068aa9` passed CI run `39878346297`. No cloud host or tunnel is provisioned.
+
