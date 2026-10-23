@@ -128,3 +128,9 @@ Security scan `0ff64092-e085-4b35-9a15-a00be8644edb` reviewed all 54 repository 
 - The production container now starts Node directly so Docker stop reaches the shutdown handler and releases the SQLite lock. The CI smoke refreshes the ephemeral host port after restart; the rebuilt app passed stop/restart against SQLite.
 - Hosted checks passed: HTTPS health returned 200, unauthenticated lead API returned 401, and direct app port 3000 was unreachable. The temporary tunnel URL is omitted because it changes on restart.
 - CI run `39939862496` passed all jobs on PR #11 head `c71ed1f`. PR #9 and PR #11 remain open; v0.1.0 remains a draft. No maintainer owner account or stable hostname has been initialized. Lead discovery remains tracked in issue #12 and the public Roadmap project.
+
+### 2026-10-23 10:46 UTC — hosted and release checks
+
+- Repeated hosted smoke: HTTPS health returned 200 and the unauthenticated lead API returned 401. The direct application port was previously verified as unreachable; the tunnel URL is temporary and omitted.
+- CI run #93 (`39940956052`) passed on PR #9 head `31e223f`. PR #11 run #91 (`39940177616`) passed all jobs on head `c3521be`.
+- PR #9 and PR #11 remain open and unmerged. v0.1.0 remains a draft. The owner account and stable hostname are not initialized. Guided lead discovery remains tracked in issue #12.
