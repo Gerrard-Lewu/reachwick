@@ -93,3 +93,9 @@ Security scan `0ff64092-e085-4b35-9a15-a00be8644edb` reviewed all 54 repository 
 - Created the public [Reachwick Roadmap project](https://github.com/users/Gerrard-Lewu/projects/4), set Reachwick as its default repository, and documented how contributors should use it. The repository had no open issues to import, so I added design issue [#12](https://github.com/Gerrard-Lewu/reachwick/issues/12) and verified GitHub linked it to the board's Todo column.
 - Confirmed the GitHub repository remains public and PRs #9 and #11 remain open. The connected cloud-management interface supports read-only inventory but exposes no VM/network provisioning operation; no cloud resources were created. Hosted deployment verification remains pending.
 - Validation: reviewed repository/PR/issue state and project visibility; no application tests were run for this documentation and project-setup change.
+
+### 2026-10-23 00:28 UTC — documentation checks complete
+
+- PR #11 head `d7e048f` contains the provider-neutral deployment and lead-discovery scope updates. CI run `39878115433` passed; `git diff --check` passed locally. No application tests were run locally.
+- PR #11 remains open and unmerged. Live hosted HTTPS validation is still pending.
+
