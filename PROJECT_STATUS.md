@@ -134,3 +134,7 @@ Security scan `0ff64092-e085-4b35-9a15-a00be8644edb` reviewed all 54 repository 
 - Repeated hosted smoke: HTTPS health returned 200 and the unauthenticated lead API returned 401. The direct application port was previously verified as unreachable; the tunnel URL is temporary and omitted.
 - CI run #93 (`39940956052`) passed on PR #9 head `31e223f`. PR #11 run #91 (`39940177616`) passed all jobs on head `c3521be`.
 - PR #9 and PR #11 remain open and unmerged. v0.1.0 remains a draft. The owner account and stable hostname are not initialized. Guided lead discovery remains tracked in issue #12.
+
+### 2026-10-23 10:54 UTC — roadmap project visibility check
+
+- Issue #12 is open and its issue page links it to Reachwick Roadmap with Status Todo. The project's Board and Table views both show zero items, while Archive is empty; the view discrepancy remains unresolved.
