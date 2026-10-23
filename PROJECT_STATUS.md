@@ -1,11 +1,11 @@
 # Project status
 
-Reachwick is public at https://github.com/Gerrard-Lewu/reachwick. PR #10 and PR #11 are merged; PR #9 remains open pending refreshed required checks. The v0.1.0 draft includes an SPDX SBOM, image metadata, checksums, and an AMD64/ARM64 image. Temporary hosted HTTPS and blocked-direct-port checks passed; continued personal hosting still needs owner initialization and a stable hostname.
+Reachwick is public at https://github.com/Gerrard-Lewu/reachwick. PRs #9, #10, and #11 are merged. The v0.1.0 draft includes an SPDX SBOM, image metadata, checksums, and an AMD64/ARM64 image. HTTPS health and anonymous API rejection passed through a temporary tunnel, and direct app access was blocked. Continued personal hosting still needs owner initialization and a stable hostname.
 
 ## Plan to finish v0.1.0
 
 1. Protect `main` with pull requests and the `check`, `secrets`, and `dependency-review` status checks. Done.
-2. Merge PR #10, run the v0.1.0 workflow, and verify the multi-architecture image and draft assets. Done.
+2. Merge PRs #9, #10, and #11, run the v0.1.0 workflow, and verify the multi-architecture image and draft assets. Done.
 3. Verify hosted HTTPS and blocked direct app access. Done through a temporary tunnel; public deployment guidance remains provider-neutral. A stable hostname is still needed for ongoing personal use.
 4. Publish the v0.1.0 release after deployment checks pass.
 
@@ -143,3 +143,8 @@ Security scan `0ff64092-e085-4b35-9a15-a00be8644edb` reviewed all 54 repository 
 
 - PR #11 merged to `main` as `67f5b4b`. PR #9 was behind the protected base, so its branch now includes the current main tree while preserving the hosted-check and roadmap visibility audit entries.
 - PR #9’s updated head requires fresh `check`, `secrets`, and `dependency-review` results before merge. The v0.1.0 release remains a draft; ongoing personal hosting still needs an initialized owner and stable hostname.
+
+### 2026-10-23 11:15 UTC — approved release audit and security merges
+
+- PR #11 merged as `67f5b4b` and PR #9 as `1eb736c` after maintainer authorization. PR #9's refreshed `check`, `secrets`, and `dependency-review` jobs passed; post-merge main CI run `39943877646` passed.
+- v0.1.0 remains an unpublished draft with its SBOM, image metadata, and checksums. HTTPS and blocked-direct-port checks used a temporary tunnel; owner initialization and a stable hostname remain open for continuous personal hosting.
