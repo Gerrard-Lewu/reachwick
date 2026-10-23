@@ -1,6 +1,6 @@
 # Project status
 
-Reachwick is public at https://github.com/Gerrard-Lewu/reachwick. PR #10 is merged; PR #9 and PR #11 remain open. The v0.1.0 draft includes an SPDX SBOM, image metadata, checksums, and an AMD64/ARM64 image. Temporary hosted HTTPS and blocked-direct-port checks now pass; publication waits on PR review, owner initialization, and a stable hostname.
+Reachwick is public at https://github.com/Gerrard-Lewu/reachwick. PR #10 and PR #11 are merged; PR #9 remains open pending refreshed required checks. The v0.1.0 draft includes an SPDX SBOM, image metadata, checksums, and an AMD64/ARM64 image. Temporary hosted HTTPS and blocked-direct-port checks passed; continued personal hosting still needs owner initialization and a stable hostname.
 
 ## Plan to finish v0.1.0
 
@@ -11,7 +11,7 @@ Reachwick is public at https://github.com/Gerrard-Lewu/reachwick. PR #10 is merg
 
 Reachwick's full product goal is an open-source workspace for both prospect generation and outreach management. The current application supports one owner and local SQLite storage, with manual/CSV lead intake, lead and campaign management, and sequence planning. The next milestone is guided, source-attributed discovery that feeds reviewed prospects into the same lead manager. Community work is tracked in the public [Reachwick Roadmap project](https://github.com/users/Gerrard-Lewu/projects/4). Public installation guidance stays provider-neutral for local use and any server that supports Docker Compose and persistent storage. Live sending, mailbox sync, billing, and team accounts remain later milestones.
 
-Security scan `0ff64092-e085-4b35-9a15-a00be8644edb` reviewed all 54 repository files statically and reported three low-severity findings. PR #11 addresses tunnel client-IP trust, spreadsheet formula-like CSV cells, and Unix permissions for SQLite data, sidecar, backup, and restore-temporary files. Windows relies on inherited ACLs. PR #11 CI passed, including Linux tests, Compose validation, container smoke, dependency review, and full-history secret scanning; the PR is open for review.
+Security scan `0ff64092-e085-4b35-9a15-a00be8644edb` reviewed all 54 repository files statically and reported three low-severity findings. PR #11 merged as `67f5b4b` and fixes tunnel client-IP trust, spreadsheet formula-like CSV cells, and Unix permissions for SQLite data, sidecar, backup, and restore-temporary files. Windows relies on inherited ACLs. Its CI passed Linux tests, Compose validation, container smoke, dependency review, and full-history secret scanning.
 
 ## Task history
 
@@ -128,3 +128,18 @@ Security scan `0ff64092-e085-4b35-9a15-a00be8644edb` reviewed all 54 repository 
 - The production container now starts Node directly so Docker stop reaches the shutdown handler and releases the SQLite lock. The CI smoke refreshes the ephemeral host port after restart; the rebuilt app passed stop/restart against SQLite.
 - Hosted checks passed: HTTPS health returned 200, unauthenticated lead API returned 401, and direct app port 3000 was unreachable. The temporary tunnel URL is omitted because it changes on restart.
 - CI run `39939862496` passed all jobs on PR #11 head `c71ed1f`. PR #9 and PR #11 remain open; v0.1.0 remains a draft. No maintainer owner account or stable hostname has been initialized. Lead discovery remains tracked in issue #12 and the public Roadmap project.
+
+### 2026-10-23 10:46 UTC — hosted and release checks
+
+- Repeated hosted smoke: HTTPS health returned 200 and the unauthenticated lead API returned 401. The direct application port was previously verified as unreachable; the tunnel URL is temporary and omitted.
+- CI run #93 (`39940956052`) passed on PR #9 head `31e223f`. PR #11 run #91 (`39940177616`) passed all jobs on head `c3521be`.
+- PR #9 and PR #11 remain open and unmerged. v0.1.0 remains a draft. The owner account and stable hostname are not initialized. Guided lead discovery remains tracked in issue #12.
+
+### 2026-10-23 10:54 UTC — roadmap project visibility check
+
+- Issue #12 is open and its issue page links it to Reachwick Roadmap with Status Todo. The project's Board and Table views both show zero items, while Archive is empty; the view discrepancy remains unresolved.
+
+### 2026-10-23 11:03 UTC — security merge and release audit reconciliation
+
+- PR #11 merged to `main` as `67f5b4b`. PR #9 was behind the protected base, so its branch now includes the current main tree while preserving the hosted-check and roadmap visibility audit entries.
+- PR #9’s updated head requires fresh `check`, `secrets`, and `dependency-review` results before merge. The v0.1.0 release remains a draft; ongoing personal hosting still needs an initialized owner and stable hostname.
