@@ -1,15 +1,15 @@
 # Project status
 
-Reachwick is public at https://github.com/Gerrard-Lewu/reachwick. PRs #9, #10, and #11 are merged. The v0.1.0 draft includes an SPDX SBOM, image metadata, checksums, and an AMD64/ARM64 image. HTTPS health and anonymous API rejection passed through a temporary tunnel, and direct app access was blocked. Continued personal hosting still needs owner initialization and a stable hostname.
+Reachwick is public at https://github.com/Gerrard-Lewu/reachwick and licensed under MIT. PRs #9, #10, #11, and #13 are merged. The [v0.1.0 release](https://github.com/Gerrard-Lewu/reachwick/releases/tag/v0.1.0) is published with an SPDX SBOM, image metadata, checksums, and a public multi-architecture image. Latest main CI passed. A private maintainer deployment has an initialized owner; HTTPS health and app pages returned 200, the anonymous leads API returned 401, and direct port 3000 was unreachable. Provider and account details are omitted.
 
 ## Plan to finish v0.1.0
 
 1. Protect `main` with pull requests and the `check`, `secrets`, and `dependency-review` status checks. Done.
 2. Merge PRs #9, #10, and #11, run the v0.1.0 workflow, and verify the multi-architecture image and draft assets. Done.
-3. Verify hosted HTTPS and blocked direct app access. Done through a temporary tunnel; public deployment guidance remains provider-neutral. A stable hostname is still needed for ongoing personal use.
-4. Publish the v0.1.0 release after deployment checks pass.
+3. Verify hosted HTTPS and blocked direct app access. Done on a private maintainer deployment with an initialized owner; provider and account details remain outside public deployment guidance.
+4. Publish v0.1.0 after deployment checks pass. Done.
 
-Reachwick's full product goal is an open-source workspace for both prospect generation and outreach management. The current application supports one owner and local SQLite storage, with manual/CSV lead intake, lead and campaign management, and sequence planning. The next milestone is guided, source-attributed discovery that feeds reviewed prospects into the same lead manager. Community work is tracked in the public [Reachwick Roadmap project](https://github.com/users/Gerrard-Lewu/projects/4). Public installation guidance stays provider-neutral for local use and any server that supports Docker Compose and persistent storage. Live sending, mailbox sync, billing, and team accounts remain later milestones.
+Reachwick's full product goal is an open-source workspace for both prospect generation and outreach management. The current application supports one owner and local SQLite storage, with manual/CSV lead intake, lead and campaign management, and sequence planning. The next milestone is guided, source-attributed discovery that feeds reviewed prospects into the same lead manager. Community work is tracked in the public [Reachwick Roadmap project](https://github.com/users/Gerrard-Lewu/projects/4). Issue #12 is linked with Todo status; its Board view currently shows zero cards after refresh, so card visibility remains unresolved. Public installation guidance stays provider-neutral for local use and any server that supports Docker Compose and persistent storage. Live sending, mailbox sync, billing, and team accounts remain later milestones.
 
 Security scan `0ff64092-e085-4b35-9a15-a00be8644edb` reviewed all 54 repository files statically and reported three low-severity findings. PR #11 merged as `67f5b4b` and fixes tunnel client-IP trust, spreadsheet formula-like CSV cells, and Unix permissions for SQLite data, sidecar, backup, and restore-temporary files. Windows relies on inherited ACLs. Its CI passed Linux tests, Compose validation, container smoke, dependency review, and full-history secret scanning.
 
@@ -148,3 +148,11 @@ Security scan `0ff64092-e085-4b35-9a15-a00be8644edb` reviewed all 54 repository 
 
 - PR #11 merged as `67f5b4b` and PR #9 as `1eb736c` after maintainer authorization. PR #9's refreshed `check`, `secrets`, and `dependency-review` jobs passed; post-merge main CI run `39943877646` passed.
 - v0.1.0 remains an unpublished draft with its SBOM, image metadata, and checksums. HTTPS and blocked-direct-port checks used a temporary tunnel; owner initialization and a stable hostname remain open for continuous personal hosting.
+
+
+### 2026-10-23 14:30 UTC — v0.1.0 published and private-host validation
+
+- Published [GitHub release v0.1.0](https://github.com/Gerrard-Lewu/reachwick/releases/tag/v0.1.0), marked Latest. Release assets include image metadata, an SPDX SBOM, and SHA256SUMS. Manual release workflow run 39945855937 succeeded; latest main CI run 39946731348 passed.
+- The release image `ghcr.io/gerrard-lewu/reachwick:v0.1.0` is anonymously retrievable and advertises `linux/amd64` and `linux/arm64`. The two commits after the release workflow changed only this status record; application code was unchanged.
+- Owner setup succeeded on the private maintainer instance. The app and tunnel containers are running, the app health check is healthy, HTTPS health/app returned 200, unauthenticated leads returned 401, direct port 3000 was unreachable, and the temporary password file is absent.
+- Limits: the owner’s interactive login/logout was not rechecked remotely; the password was entered by the maintainer and was not observed. Issue #12 remains linked to the Roadmap with Todo status, but its Board view displays zero cards after refresh. Public hosting guidance remains provider-neutral; personal provider and account details are omitted.

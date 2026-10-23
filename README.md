@@ -27,7 +27,7 @@ Setup prompts for your email and password. Open [localhost:3000/app](http://127.
 
 Run on Windows, macOS, or Linux, or use Docker on a server you choose. The Cloudflare Tunnel example is optional; no cloud provider is required. See [installation](docs/installation.md), [deployment](docs/deployment.md), and [backup & recovery](docs/backup.md).
 
-**v0.1.0 candidate:** manage leads from manual entry or CSV, organize campaigns, and plan sequences. Owner-focused lead discovery and research is the next milestone. Email delivery, mailbox sync, billing, and team accounts are later work. Container and hosted deployment checks remain [release gates](docs/release.md).
+**v0.1.0:** manage leads from manual entry or CSV, organize campaigns, and plan sequences. The multi-architecture image is `ghcr.io/gerrard-lewu/reachwick:v0.1.0`; the [release](https://github.com/Gerrard-Lewu/reachwick/releases/tag/v0.1.0) includes image metadata, an SPDX SBOM, and checksums. Hosted HTTPS and blocked-direct-port checks passed. Owner-focused lead discovery and research is the next milestone. Email delivery, mailbox sync, billing, and team accounts are later work.
 
 ## Contribute
 
