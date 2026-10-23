@@ -1,7 +1,7 @@
 import { openSync, closeSync, unlinkSync, mkdirSync } from "node:fs";
 import { dirname } from "node:path";
 export function acquireLock(path: string) {
-  mkdirSync(dirname(path), { recursive: true });
+  mkdirSync(dirname(path), { recursive: true, mode: 0o700 });
   let fd: number;
   try {
     fd = openSync(path + ".lock", "wx", 0o600);

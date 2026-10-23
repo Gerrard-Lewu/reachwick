@@ -18,12 +18,28 @@ import {
 } from "node:crypto";
 import { existsSync } from "node:fs";
 import { resolve } from "node:path";
+import { isIP } from "node:net";
 export function hashPassword(password: string) {
   const salt = randomBytes(16).toString("hex");
   return salt + ":" + scryptSync(password, salt, 64).toString("hex");
 }
 const digest = (s: string) => createHash("sha256").update(s).digest("hex");
-export async function createApp(databasePath?: string) {
+const normalizeIp = (ip: string) =>
+  ip.toLowerCase().startsWith("::ffff:") ? ip.slice(7) : ip.toLowerCase();
+export function quoteCsvCell(value: string) {
+  const formulaLike = /^[\s\p{Cc}]*[=+\-@＝＋－＠]/u.test(value);
+  const safeValue = formulaLike ? "'" + value : value;
+  return '"' + safeValue.replaceAll('"', '""') + '"';
+}
+export async function createApp(
+  databasePath?: string,
+  options: { trustedTunnelProxyIp?: string } = {},
+) {
+  const configuredProxyIp =
+    options.trustedTunnelProxyIp ?? process.env.TRUSTED_TUNNEL_PROXY_IP ?? "";
+  const trustedTunnelProxyIp = normalizeIp(configuredProxyIp.trim());
+  if (trustedTunnelProxyIp && isIP(trustedTunnelProxyIp) === 0)
+    throw new Error("TRUSTED_TUNNEL_PROXY_IP must be a valid IP address");
   const release = acquireLock(
     databasePath || process.env.DATABASE_PATH || "data/reachwick.sqlite",
   );
@@ -36,7 +52,22 @@ export async function createApp(databasePath?: string) {
   }
   const app = Fastify({ bodyLimit: 1048576, logger: false });
   await app.register(cookie);
-  await app.register(rateLimit, { max: 120, timeWindow: "1 minute" });
+  await app.register(rateLimit, {
+    max: 120,
+    timeWindow: "1 minute",
+    keyGenerator: (req) => {
+      const peerIp = normalizeIp(req.raw.socket.remoteAddress || "");
+      const cloudflareClientIp = req.headers["cf-connecting-ip"];
+      if (
+        trustedTunnelProxyIp &&
+        peerIp === trustedTunnelProxyIp &&
+        typeof cloudflareClientIp === "string" &&
+        isIP(cloudflareClientIp.trim()) !== 0
+      )
+        return normalizeIp(cloudflareClientIp.trim());
+      return req.ip;
+    },
+  });
   app.addHook("onClose", async () => {
     db.close();
     release();
@@ -190,8 +221,6 @@ export async function createApp(databasePath?: string) {
     const rows = db
       .prepare("SELECT email,name,company,status,notes FROM leads ORDER BY id")
       .all() as any[];
-    const quote = (v: string) =>
-      '"' + (/^[=+@-]/.test(v) ? "'" : "") + v.replaceAll('"', '""') + '"';
     reply
       .type("text/csv")
       .header("Content-Disposition", 'attachment; filename="leads.csv"');
@@ -200,7 +229,7 @@ export async function createApp(databasePath?: string) {
       rows
         .map((r) =>
           Object.values(r)
-            .map((v) => quote(String(v)))
+            .map((v) => quoteCsvCell(String(v)))
             .join(","),
         )
         .join("\r\n")

@@ -1,10 +1,10 @@
 # Reachwick
 
-**Your outreach workspace. Your data. Your infrastructure.**
+**An open-source workspace for lead generation and outreach management. Your data. Your infrastructure.**
 
 Manage leads, draft campaigns, sequences, schedules, and suppression lists in a self-hosted workspace. One owner, local SQLite storage, no required cloud services.
 
-[Quick start](#quick-start) · [Docker & cloud](docs/deployment.md) · [Contributing](CONTRIBUTING.md) · [Roadmap](ROADMAP.md)
+[Quick start](#quick-start) · [Docker & cloud](docs/deployment.md) · [Contribute](CONTRIBUTING.md) · [Roadmap](ROADMAP.md) · [Project board](https://github.com/users/Gerrard-Lewu/projects/4)
 
 ![Reachwick workspace with synthetic data](docs/assets/workspace.png)
 
@@ -25,9 +25,9 @@ Setup prompts for your email and password. Open [localhost:3000/app](http://127.
 
 ## Run it anywhere
 
-Use your Windows, macOS, or Linux device, Docker, or an Oracle VM behind Cloudflare Tunnel. See [installation](docs/installation.md), [deployment](docs/deployment.md), and [backup & recovery](docs/backup.md).
+Run on Windows, macOS, or Linux, or use Docker on a server you choose. The Cloudflare Tunnel example is optional; no cloud provider is required. See [installation](docs/installation.md), [deployment](docs/deployment.md), and [backup & recovery](docs/backup.md).
 
-**v0.1.0 candidate:** core workflows work locally. Email sending, mailbox sync, AI research, billing, and team accounts are planned. Container and live cloud verification remain [release gates](docs/release.md).
+**v0.1.0 candidate:** manage leads from manual entry or CSV, organize campaigns, and plan sequences. Owner-focused lead discovery and research is the next milestone. Email delivery, mailbox sync, billing, and team accounts are later work. Container and hosted deployment checks remain [release gates](docs/release.md).
 
 ## Contribute
 

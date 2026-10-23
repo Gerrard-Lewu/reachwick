@@ -4,4 +4,4 @@
 
 - Independent Reachwick identity and MIT license.
 - Persistent single-owner outreach planning.
-- Native, container, and Oracle/Cloudflare deployment support.
+- Native and container deployment, with an optional Cloudflare Tunnel example for remote access.
