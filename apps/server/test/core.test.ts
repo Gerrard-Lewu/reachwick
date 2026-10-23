@@ -154,6 +154,30 @@ test("SQLite data files stay private under a permissive Unix umask", (t) => {
     rmSync(dir, { recursive: true, force: true });
   }
 });
+test("new application data directories stay private under a permissive Unix umask", async (t) => {
+  if (process.platform === "win32") {
+    t.skip("Windows file access is governed by inherited ACLs");
+    return;
+  }
+  const root = mkdtempSync(join(tmpdir(), "reachwick-lock-permissions-"));
+  const dataDir = join(root, "private", "data");
+  let app: Awaited<ReturnType<typeof createApp>> | undefined;
+  const previousUmask = process.umask(0);
+  let pending: ReturnType<typeof createApp>;
+  try {
+    pending = createApp(join(dataDir, "db.sqlite"));
+  } finally {
+    process.umask(previousUmask);
+  }
+  try {
+    app = await pending;
+    assert.equal(statSync(dataDir).mode & 0o777, 0o700);
+  } finally {
+    await app?.close();
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
 test("campaign composition, validation, suppression, settings and migrations", async () => {
   const dir = mkdtempSync(join(tmpdir(), "reachwick-"));
   const path = join(dir, "db.sqlite");
