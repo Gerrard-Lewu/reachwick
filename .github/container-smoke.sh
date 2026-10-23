@@ -20,6 +20,7 @@ login() { curl --fail --silent -H 'Content-Type: application/json' -d '{"email":
 login
 docker stop "$container" >/dev/null
 docker start "$container" >/dev/null
+port=$(docker port "$container" 3000/tcp | cut -d: -f2)
 for attempt in $(seq 1 40); do
   if curl --fail --silent "http://127.0.0.1:$port/healthz" >/dev/null; then break; fi
   sleep 2
