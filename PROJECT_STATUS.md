@@ -1,12 +1,12 @@
 # Project status
 
-Reachwick is public at https://github.com/Gerrard-Lewu/reachwick. PR #10 is merged; PR #9 (release status docs) and PR #11 (security hardening) remain open. Manual release run `39834407710` passed and created a v0.1.0 draft with an SPDX SBOM, image metadata, and SHA256SUMS; the public GHCR image supports Linux AMD64 and ARM64. Final publication and hosted HTTPS verification remain pending because no host or tunnel is provisioned.
+Reachwick is public at https://github.com/Gerrard-Lewu/reachwick. PR #10 is merged; PR #9 and PR #11 remain open. The v0.1.0 draft includes an SPDX SBOM, image metadata, checksums, and an AMD64/ARM64 image. Temporary hosted HTTPS and blocked-direct-port checks now pass; publication waits on PR review, owner initialization, and a stable hostname.
 
 ## Plan to finish v0.1.0
 
 1. Protect `main` with pull requests and the `check`, `secrets`, and `dependency-review` status checks. Done.
 2. Merge PR #10, run the v0.1.0 workflow, and verify the multi-architecture image and draft assets. Done.
-3. Verify HTTPS through the selected remote-access proxy or tunnel and confirm direct app access is blocked. Waiting for the maintainer's personal environment; public deployment guidance remains provider-neutral.
+3. Verify hosted HTTPS and blocked direct app access. Done through a temporary tunnel; public deployment guidance remains provider-neutral. A stable hostname is still needed for ongoing personal use.
 4. Publish the v0.1.0 release after deployment checks pass.
 
 Reachwick's full product goal is an open-source workspace for both prospect generation and outreach management. The current application supports one owner and local SQLite storage, with manual/CSV lead intake, lead and campaign management, and sequence planning. The next milestone is guided, source-attributed discovery that feeds reviewed prospects into the same lead manager. Community work is tracked in the public [Reachwick Roadmap project](https://github.com/users/Gerrard-Lewu/projects/4). Public installation guidance stays provider-neutral for local use and any server that supports Docker Compose and persistent storage. Live sending, mailbox sync, billing, and team accounts remain later milestones.
@@ -121,3 +121,10 @@ Security scan `0ff64092-e085-4b35-9a15-a00be8644edb` reviewed all 54 repository 
 - Reconfirmed issue [#12](https://github.com/Gerrard-Lewu/reachwick/issues/12) is linked to the public [Reachwick Roadmap project](https://github.com/users/Gerrard-Lewu/projects/4) with status Todo. The board has no filters but still displays zero items in Todo, In Progress, and Done.
 - Refreshed the issue’s project membership and reloaded the board; it remained empty. The board’s add-item search offered to create a new issue with the same title, so no duplicate was created. Board display remains unresolved; the issue stays linked.
 - No application code changed and no application tests ran. Provider-neutral deployment guidance, the broader prospect-generation and management goal, and the draft-release / hosted-verification gates remain as recorded above.
+
+### 2026-10-23 10:33 UTC — cloud access and container restart validation
+
+- Authenticated calls through the configured cloud-management MCP succeeded. A temporary network create/rename/delete check passed and the test network was removed.
+- The production container now starts Node directly so Docker stop reaches the shutdown handler and releases the SQLite lock. The CI smoke refreshes the ephemeral host port after restart; the rebuilt app passed stop/restart against SQLite.
+- Hosted checks passed: HTTPS health returned 200, unauthenticated lead API returned 401, and direct app port 3000 was unreachable. The temporary tunnel URL is omitted because it changes on restart.
+- CI run `39939862496` passed all jobs on PR #11 head `c71ed1f`. PR #9 and PR #11 remain open; v0.1.0 remains a draft. No maintainer owner account or stable hostname has been initialized. Lead discovery remains tracked in issue #12 and the public Roadmap project.
